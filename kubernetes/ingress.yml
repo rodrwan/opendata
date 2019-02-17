@@ -1,0 +1,22 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  namespace: opendata
+  name: http-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    #certmanager.k8s.io/issuer: "letsencrypt-staging"
+    #certmanager.k8s.io/acme-challenge-type: http01
+spec:
+  rules:
+  - host: opendata.com
+    http:
+      paths:
+      - path: /graphql
+        backend:
+          serviceName: graphql
+          servicePort: 3001
+      - path: /fronted
+        backend:
+          serviceName: frontend
+          servicePort: 3000

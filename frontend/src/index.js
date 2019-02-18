@@ -12,10 +12,10 @@ import * as serviceWorker from './serviceWorker';
 
 const cache = new InMemoryCache();
 
-const BASE_URL = 'http://localhost:3001/v1/graphql';
+const BACKEND_URL = process.env.REACT_BACKEND_URL;
 
 const httpLink = new HttpLink({
-  uri: BASE_URL,
+  uri: BACKEND_URL,
 });
 
 const client = new ApolloClient({

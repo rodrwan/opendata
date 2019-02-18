@@ -1,8 +1,10 @@
-FROM node:7.10 as build-deps
+FROM node:10.15.1 as build-deps
 WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
+COPY package.json ./
 RUN yarn
 COPY . ./
+
+ENV REACT_BACKEND_URL "http://opendata.com/v1/graphql"
 RUN yarn build
 
 FROM nginx:1.12-alpine

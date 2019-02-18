@@ -12,11 +12,15 @@ spec:
   - host: opendata.com
     http:
       paths:
-      - path: /graphql
+      - path: /v1/graphql
         backend:
           serviceName: graphql
           servicePort: 3001
-      - path: /fronted
+      - path: /v2/graphql
+        backend:
+          serviceName: graphql
+          servicePort: 3001
+      - path: /
         backend:
           serviceName: frontend
-          servicePort: 3000
+          servicePort: 80

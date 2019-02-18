@@ -28,14 +28,8 @@ spec:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 3000
+        - containerPort: 80
           name: http-frontend
-        livenessProbe:
-          httpGet:
-            path: /healthz
-            port: http-frontend
-          initialDelaySeconds: 10
-          timeoutSeconds: 1
 ---
 apiVersion: v1
 kind: Service
@@ -48,9 +42,9 @@ metadata:
 spec:
   ports:
   - name: http-frontend
-    port: 3000
+    port: 80
     protocol: TCP
-    targetPort: 3000
+    targetPort: 80
   selector:
     run: frontend
     tier: frontend

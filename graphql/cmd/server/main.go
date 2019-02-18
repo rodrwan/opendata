@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
@@ -56,6 +57,10 @@ func main() {
 	{
 		v2.POST("/graphql", HandlerV2())
 	}
+
+	router.GET("/healthz", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "OK")
+	})
 
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())

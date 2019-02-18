@@ -1,5 +1,5 @@
 VERSION=v0.0.1
-SVC=grapqhql
+SVC=graphql
 BIN=$(PWD)/bin/$(SVC)
 
 GO ?= go

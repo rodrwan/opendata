@@ -12,7 +12,7 @@ import * as serviceWorker from './serviceWorker';
 
 const cache = new InMemoryCache();
 
-const BACKEND_URL = process.env.REACT_BACKEND_URL;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const httpLink = new HttpLink({
   uri: BACKEND_URL,

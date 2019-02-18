@@ -4,7 +4,8 @@ COPY package.json ./
 RUN yarn
 COPY . ./
 
-ENV REACT_BACKEND_URL "http://opendata.com/v1/graphql"
+ENV REACT_APP_BACKEND_URL "http://opendata.com/v1/graphql"
+
 RUN yarn build
 
 FROM nginx:1.12-alpine

@@ -38,13 +38,51 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Currently struct {
+		Summary           func(childComplexity int) int
+		Temperature       func(childComplexity int) int
+		Humidity          func(childComplexity int) int
+		WindSpeed         func(childComplexity int) int
+		PrecipProbability func(childComplexity int) int
+	}
+
+	Forecast struct {
+		Latitude  func(childComplexity int) int
+		Longitude func(childComplexity int) int
+		Name      func(childComplexity int) int
+		Timezone  func(childComplexity int) int
+		Currently func(childComplexity int) int
+	}
+
 	Query struct {
-		Hello func(childComplexity int) int
+		Hello    func(childComplexity int) int
+		Forecast func(childComplexity int, data *ForecastInput) int
 	}
 }
 
 type QueryResolver interface {
 	Hello(ctx context.Context) (string, error)
+	Forecast(ctx context.Context, data *ForecastInput) (*Forecast, error)
+}
+
+func field_Query_forecast_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	args := map[string]interface{}{}
+	var arg0 *ForecastInput
+	if tmp, ok := rawArgs["data"]; ok {
+		var err error
+		var ptr1 ForecastInput
+		if tmp != nil {
+			ptr1, err = UnmarshalForecastInput(tmp)
+			arg0 = &ptr1
+		}
+
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["data"] = arg0
+	return args, nil
+
 }
 
 func field_Query___type_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
@@ -105,12 +143,94 @@ func (e *executableSchema) Schema() *ast.Schema {
 func (e *executableSchema) Complexity(typeName, field string, childComplexity int, rawArgs map[string]interface{}) (int, bool) {
 	switch typeName + "." + field {
 
+	case "Currently.summary":
+		if e.complexity.Currently.Summary == nil {
+			break
+		}
+
+		return e.complexity.Currently.Summary(childComplexity), true
+
+	case "Currently.temperature":
+		if e.complexity.Currently.Temperature == nil {
+			break
+		}
+
+		return e.complexity.Currently.Temperature(childComplexity), true
+
+	case "Currently.humidity":
+		if e.complexity.Currently.Humidity == nil {
+			break
+		}
+
+		return e.complexity.Currently.Humidity(childComplexity), true
+
+	case "Currently.windSpeed":
+		if e.complexity.Currently.WindSpeed == nil {
+			break
+		}
+
+		return e.complexity.Currently.WindSpeed(childComplexity), true
+
+	case "Currently.precipProbability":
+		if e.complexity.Currently.PrecipProbability == nil {
+			break
+		}
+
+		return e.complexity.Currently.PrecipProbability(childComplexity), true
+
+	case "Forecast.latitude":
+		if e.complexity.Forecast.Latitude == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Latitude(childComplexity), true
+
+	case "Forecast.longitude":
+		if e.complexity.Forecast.Longitude == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Longitude(childComplexity), true
+
+	case "Forecast.name":
+		if e.complexity.Forecast.Name == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Name(childComplexity), true
+
+	case "Forecast.timezone":
+		if e.complexity.Forecast.Timezone == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Timezone(childComplexity), true
+
+	case "Forecast.currently":
+		if e.complexity.Forecast.Currently == nil {
+			break
+		}
+
+		return e.complexity.Forecast.Currently(childComplexity), true
+
 	case "Query.hello":
 		if e.complexity.Query.Hello == nil {
 			break
 		}
 
 		return e.complexity.Query.Hello(childComplexity), true
+
+	case "Query.forecast":
+		if e.complexity.Query.Forecast == nil {
+			break
+		}
+
+		args, err := field_Query_forecast_args(rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Forecast(childComplexity, args["data"].(*ForecastInput)), true
 
 	}
 	return 0, false
@@ -145,6 +265,377 @@ type executionContext struct {
 	*executableSchema
 }
 
+var currentlyImplementors = []string{"Currently"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Currently(ctx context.Context, sel ast.SelectionSet, obj *Currently) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, currentlyImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Currently")
+		case "summary":
+			out.Values[i] = ec._Currently_summary(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "temperature":
+			out.Values[i] = ec._Currently_temperature(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "humidity":
+			out.Values[i] = ec._Currently_humidity(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "windSpeed":
+			out.Values[i] = ec._Currently_windSpeed(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "precipProbability":
+			out.Values[i] = ec._Currently_precipProbability(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Currently_summary(ctx context.Context, field graphql.CollectedField, obj *Currently) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Currently",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Summary, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Currently_temperature(ctx context.Context, field graphql.CollectedField, obj *Currently) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Currently",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Temperature, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Currently_humidity(ctx context.Context, field graphql.CollectedField, obj *Currently) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Currently",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Humidity, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Currently_windSpeed(ctx context.Context, field graphql.CollectedField, obj *Currently) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Currently",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.WindSpeed, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Currently_precipProbability(ctx context.Context, field graphql.CollectedField, obj *Currently) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Currently",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PrecipProbability, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+var forecastImplementors = []string{"Forecast"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Forecast(ctx context.Context, sel ast.SelectionSet, obj *Forecast) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, forecastImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Forecast")
+		case "latitude":
+			out.Values[i] = ec._Forecast_latitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "longitude":
+			out.Values[i] = ec._Forecast_longitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "name":
+			out.Values[i] = ec._Forecast_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "timezone":
+			out.Values[i] = ec._Forecast_timezone(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "currently":
+			out.Values[i] = ec._Forecast_currently(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Forecast_latitude(ctx context.Context, field graphql.CollectedField, obj *Forecast) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Forecast",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitude, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Forecast_longitude(ctx context.Context, field graphql.CollectedField, obj *Forecast) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Forecast",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitude, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Forecast_name(ctx context.Context, field graphql.CollectedField, obj *Forecast) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Forecast",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Forecast_timezone(ctx context.Context, field graphql.CollectedField, obj *Forecast) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Forecast",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Timezone, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Forecast_currently(ctx context.Context, field graphql.CollectedField, obj *Forecast) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Forecast",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Currently, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(Currently)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	return ec._Currently(ctx, field.Selections, &res)
+}
+
 var queryImplementors = []string{"Query"}
 
 // nolint: gocyclo, errcheck, gas, goconst
@@ -171,6 +662,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				if out.Values[i] == graphql.Null {
 					invalid = true
 				}
+				wg.Done()
+			}(i, field)
+		case "forecast":
+			wg.Add(1)
+			go func(i int, field graphql.CollectedField) {
+				out.Values[i] = ec._Query_forecast(ctx, field)
 				wg.Done()
 			}(i, field)
 		case "__type":
@@ -213,6 +710,41 @@ func (ec *executionContext) _Query_hello(ctx context.Context, field graphql.Coll
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Query_forecast(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := field_Query_forecast_args(rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx := &graphql.ResolverContext{
+		Object: "Query",
+		Args:   args,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Forecast(rctx, args["data"].(*ForecastInput))
+	})
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*Forecast)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	if res == nil {
+		return graphql.Null
+	}
+
+	return ec._Forecast(ctx, field.Selections, res)
 }
 
 // nolint: vetshadow
@@ -1724,6 +2256,36 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 	return ec.___Type(ctx, field.Selections, res)
 }
 
+func UnmarshalForecastInput(v interface{}) (ForecastInput, error) {
+	var it ForecastInput
+	var asMap = v.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "latitude":
+			var err error
+			it.Latitude, err = graphql.UnmarshalFloat(v)
+			if err != nil {
+				return it, err
+			}
+		case "longitude":
+			var err error
+			it.Longitude, err = graphql.UnmarshalFloat(v)
+			if err != nil {
+				return it, err
+			}
+		case "lang":
+			var err error
+			it.Lang, err = graphql.UnmarshalString(v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) FieldMiddleware(ctx context.Context, obj interface{}, next graphql.Resolver) (ret interface{}) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -1754,9 +2316,33 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "schema.graphql", Input: `type Query {
-  hello: Hello!
+	&ast.Source{Name: "schema.graphql", Input: `input ForecastInput {
+  latitude: Float!
+  longitude: Float!
+  lang: String!
 }
 
-scalar Hello`},
+type Currently {
+  summary: String!
+  temperature: Float!
+  humidity: Float!
+  windSpeed: Float!
+  precipProbability: Float!
+}
+
+type Forecast {
+  latitude: Float!
+  longitude: Float!
+  name: String!
+  timezone: String!
+  currently: Currently!
+}
+
+type Query {
+  hello: Hello!
+  forecast(data: ForecastInput): Forecast
+}
+
+scalar Hello
+`},
 )

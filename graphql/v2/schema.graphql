@@ -1,5 +1,28 @@
+input ForecastInput {
+  latitude: Float!
+  longitude: Float!
+  lang: String!
+}
+
+type Currently {
+  summary: String!
+  temperature: Float!
+  humidity: Float!
+  windSpeed: Float!
+  precipProbability: Float!
+}
+
+type Forecast {
+  latitude: Float!
+  longitude: Float!
+  name: String!
+  timezone: String!
+  currently: Currently!
+}
+
 type Query {
   hello: Hello!
+  forecast(data: ForecastInput): Forecast
 }
 
 scalar Hello

@@ -1,4 +1,4 @@
-VERSION=v0.0.1
+VERSION=v0.2.0
 SVC=graphql
 BIN=$(PWD)/bin/$(SVC)
 

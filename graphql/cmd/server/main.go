@@ -1,8 +1,11 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
+
+	"github.com/rodrwan/opendata/graphql/v2/gmarcone"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
@@ -25,11 +28,14 @@ func HandlerV1(schema graphql.Schema) gin.HandlerFunc {
 }
 
 // HandlerV2 initializes the graphql middleware.
-func HandlerV2() gin.HandlerFunc {
+func HandlerV2(URL string) gin.HandlerFunc {
 	// Creates a GraphQL-go HTTP handler with the defined schema
+
 	h := handler.GraphQL(
 		v2Graph.NewExecutableSchema(
-			v2Graph.Config{Resolvers: &v2Graph.Resolver{}},
+			v2Graph.Config{Resolvers: &v2Graph.Resolver{
+				GMarconeClient: gmarcone.NewClient(URL),
+			}},
 		),
 	)
 
@@ -39,6 +45,10 @@ func HandlerV2() gin.HandlerFunc {
 }
 
 func main() {
+	gmarconeURL := flag.String("gmarcone-url", "http://gmarcone:3002", "gmarcone service url")
+
+	flag.Parse()
+
 	router := gin.Default()
 	router.Use(cors.Default())
 
@@ -55,7 +65,7 @@ func main() {
 	// Simple group: v2
 	v2 := router.Group("/v2")
 	{
-		v2.POST("/graphql", HandlerV2())
+		v2.POST("/graphql", HandlerV2(*gmarconeURL))
 	}
 
 	router.GET("/healthz", func(ctx *gin.Context) {

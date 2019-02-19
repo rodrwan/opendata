@@ -13,12 +13,12 @@ spec:
       labels:
         run: graphql
         tier: backend
-        version: v0.0.2
+        version: v0.2.0
     spec:
       restartPolicy: Always
       containers:
       - name: graphql
-        image: rodrwan/graphql:v0.0.1
+        image: rodrwan/graphql:v0.2.0
         imagePullPolicy: Always
         resources:
           requests:

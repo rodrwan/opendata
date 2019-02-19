@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: opendata
+  name: gmarcone
+spec:
+  selector:
+    matchLabels:
+      run: gmarcone
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: gmarcone
+        tier: backend
+        version: v0.0.2
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: gmarcone
+        image: rodrwan/gmarcone:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          - name: PORT
+            value: "3002"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_HOST
+            value: redis-master
+          - name: DARKSKY_API_URL
+            value: "https://api.darksky.net/forecast"
+          - name: DARKSKY_TOKEN
+            value: ""
+          - name: DARKSKY_API_CALLS
+            value: "1000"
+          - name: GEOCODE_API_URL
+            value: "https://maps.googleapis.com/maps/api/geocode/json"
+          - name: GEOCODE_API_TOKEN
+            value: ""
+          - name: CACHE_INTERVAL
+            value: "87"
+        ports:
+        - containerPort: 3002
+          name: http-gmarcone
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gmarcone
+  namespace: opendata
+  labels:
+    run: gmarcone
+    tier: backend
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http-gmarcone
+    port: 3002
+    protocol: TCP
+    targetPort: 3002
+  selector:
+    run: gmarcone
+    tier: backend

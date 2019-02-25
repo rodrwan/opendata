@@ -22,6 +22,7 @@ var (
 	}
 )
 
+// Response represent api message response.
 type Response struct {
 	ID       string     `json:"id"`
 	Time     string     `json:"horaConsulta"`
@@ -29,6 +30,7 @@ type Response struct {
 	Services []*Service `json:"servicios"`
 }
 
+// Service represent a bus service.
 type Service struct {
 	Valid     int8   `json:"valido"`
 	Service   string `json:"servicio"`

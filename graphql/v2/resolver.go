@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/rodrwan/opendata/graphql/v2/gmarcone"
+	"github.com/rodrwan/opendata/graphql/gmarcone"
 )
 
 type Resolver struct {

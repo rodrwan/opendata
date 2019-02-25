@@ -36,3 +36,11 @@ func (r *queryResolver) Forecast(ctx context.Context, data *ForecastInput) (*For
 
 	return &forecast, err
 }
+
+func (r *queryResolver) Hearthquake(ctx context.Context, data string) (Earthquake, error) {
+	panic("not implemented")
+}
+
+func (r *queryResolver) Transantiago(ctx context.Context, data string) (Transantiago, error) {
+	panic("not implemented")
+}

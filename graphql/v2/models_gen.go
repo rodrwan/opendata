@@ -10,6 +10,21 @@ type Currently struct {
 	PrecipProbability float64 `json:"precipProbability"`
 }
 
+type Earthquake struct {
+	Enlace      string              `json:"enlace"`
+	Latitud     float64             `json:"latitud"`
+	Longitude   float64             `json:"longitude"`
+	Profundidad float64             `json:"profundidad"`
+	Magnitude   EarthquakeMagnitude `json:"magnitude"`
+	Imagen      string              `json:"imagen"`
+}
+
+type EarthquakeMagnitude struct {
+	Magnitude float64 `json:"magnitude"`
+	Medida    string  `json:"medida"`
+	Fuente    string  `json:"fuente"`
+}
+
 type Forecast struct {
 	Latitude  float64   `json:"latitude"`
 	Longitude float64   `json:"longitude"`
@@ -22,4 +37,18 @@ type ForecastInput struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 	Lang      string  `json:"lang"`
+}
+
+type Microbus struct {
+	Valido    int    `json:"valido"`
+	Servicio  string `json:"servicio"`
+	Patente   string `json:"patente"`
+	Tiempo    string `json:"tiempo"`
+	Distancia string `json:"distancia"`
+}
+
+type Transantiago struct {
+	HoraConsulta string     `json:"horaConsulta"`
+	Descripcion  string     `json:"descripcion"`
+	Servicios    []Microbus `json:"Servicios"`
 }

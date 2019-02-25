@@ -46,6 +46,21 @@ type ComplexityRoot struct {
 		PrecipProbability func(childComplexity int) int
 	}
 
+	Earthquake struct {
+		Enlace      func(childComplexity int) int
+		Latitud     func(childComplexity int) int
+		Longitude   func(childComplexity int) int
+		Profundidad func(childComplexity int) int
+		Magnitude   func(childComplexity int) int
+		Imagen      func(childComplexity int) int
+	}
+
+	EarthquakeMagnitude struct {
+		Magnitude func(childComplexity int) int
+		Medida    func(childComplexity int) int
+		Fuente    func(childComplexity int) int
+	}
+
 	Forecast struct {
 		Latitude  func(childComplexity int) int
 		Longitude func(childComplexity int) int
@@ -54,15 +69,33 @@ type ComplexityRoot struct {
 		Currently func(childComplexity int) int
 	}
 
+	Microbus struct {
+		Valido    func(childComplexity int) int
+		Servicio  func(childComplexity int) int
+		Patente   func(childComplexity int) int
+		Tiempo    func(childComplexity int) int
+		Distancia func(childComplexity int) int
+	}
+
 	Query struct {
-		Hello    func(childComplexity int) int
-		Forecast func(childComplexity int, data *ForecastInput) int
+		Hello        func(childComplexity int) int
+		Forecast     func(childComplexity int, data *ForecastInput) int
+		Hearthquake  func(childComplexity int, data string) int
+		Transantiago func(childComplexity int, data string) int
+	}
+
+	Transantiago struct {
+		HoraConsulta func(childComplexity int) int
+		Descripcion  func(childComplexity int) int
+		Servicios    func(childComplexity int) int
 	}
 }
 
 type QueryResolver interface {
 	Hello(ctx context.Context) (string, error)
 	Forecast(ctx context.Context, data *ForecastInput) (*Forecast, error)
+	Hearthquake(ctx context.Context, data string) (Earthquake, error)
+	Transantiago(ctx context.Context, data string) (Transantiago, error)
 }
 
 func field_Query_forecast_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
@@ -76,6 +109,36 @@ func field_Query_forecast_args(rawArgs map[string]interface{}) (map[string]inter
 			arg0 = &ptr1
 		}
 
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["data"] = arg0
+	return args, nil
+
+}
+
+func field_Query_hearthquake_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["data"]; ok {
+		var err error
+		arg0, err = graphql.UnmarshalString(tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["data"] = arg0
+	return args, nil
+
+}
+
+func field_Query_transantiago_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["data"]; ok {
+		var err error
+		arg0, err = graphql.UnmarshalString(tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -178,6 +241,69 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Currently.PrecipProbability(childComplexity), true
 
+	case "Earthquake.enlace":
+		if e.complexity.Earthquake.Enlace == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Enlace(childComplexity), true
+
+	case "Earthquake.latitud":
+		if e.complexity.Earthquake.Latitud == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Latitud(childComplexity), true
+
+	case "Earthquake.longitude":
+		if e.complexity.Earthquake.Longitude == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Longitude(childComplexity), true
+
+	case "Earthquake.profundidad":
+		if e.complexity.Earthquake.Profundidad == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Profundidad(childComplexity), true
+
+	case "Earthquake.magnitude":
+		if e.complexity.Earthquake.Magnitude == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Magnitude(childComplexity), true
+
+	case "Earthquake.imagen":
+		if e.complexity.Earthquake.Imagen == nil {
+			break
+		}
+
+		return e.complexity.Earthquake.Imagen(childComplexity), true
+
+	case "EarthquakeMagnitude.magnitude":
+		if e.complexity.EarthquakeMagnitude.Magnitude == nil {
+			break
+		}
+
+		return e.complexity.EarthquakeMagnitude.Magnitude(childComplexity), true
+
+	case "EarthquakeMagnitude.medida":
+		if e.complexity.EarthquakeMagnitude.Medida == nil {
+			break
+		}
+
+		return e.complexity.EarthquakeMagnitude.Medida(childComplexity), true
+
+	case "EarthquakeMagnitude.fuente":
+		if e.complexity.EarthquakeMagnitude.Fuente == nil {
+			break
+		}
+
+		return e.complexity.EarthquakeMagnitude.Fuente(childComplexity), true
+
 	case "Forecast.latitude":
 		if e.complexity.Forecast.Latitude == nil {
 			break
@@ -213,6 +339,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Forecast.Currently(childComplexity), true
 
+	case "Microbus.valido":
+		if e.complexity.Microbus.Valido == nil {
+			break
+		}
+
+		return e.complexity.Microbus.Valido(childComplexity), true
+
+	case "Microbus.servicio":
+		if e.complexity.Microbus.Servicio == nil {
+			break
+		}
+
+		return e.complexity.Microbus.Servicio(childComplexity), true
+
+	case "Microbus.patente":
+		if e.complexity.Microbus.Patente == nil {
+			break
+		}
+
+		return e.complexity.Microbus.Patente(childComplexity), true
+
+	case "Microbus.tiempo":
+		if e.complexity.Microbus.Tiempo == nil {
+			break
+		}
+
+		return e.complexity.Microbus.Tiempo(childComplexity), true
+
+	case "Microbus.distancia":
+		if e.complexity.Microbus.Distancia == nil {
+			break
+		}
+
+		return e.complexity.Microbus.Distancia(childComplexity), true
+
 	case "Query.hello":
 		if e.complexity.Query.Hello == nil {
 			break
@@ -231,6 +392,51 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Forecast(childComplexity, args["data"].(*ForecastInput)), true
+
+	case "Query.hearthquake":
+		if e.complexity.Query.Hearthquake == nil {
+			break
+		}
+
+		args, err := field_Query_hearthquake_args(rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Hearthquake(childComplexity, args["data"].(string)), true
+
+	case "Query.transantiago":
+		if e.complexity.Query.Transantiago == nil {
+			break
+		}
+
+		args, err := field_Query_transantiago_args(rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Transantiago(childComplexity, args["data"].(string)), true
+
+	case "Transantiago.horaConsulta":
+		if e.complexity.Transantiago.HoraConsulta == nil {
+			break
+		}
+
+		return e.complexity.Transantiago.HoraConsulta(childComplexity), true
+
+	case "Transantiago.descripcion":
+		if e.complexity.Transantiago.Descripcion == nil {
+			break
+		}
+
+		return e.complexity.Transantiago.Descripcion(childComplexity), true
+
+	case "Transantiago.Servicios":
+		if e.complexity.Transantiago.Servicios == nil {
+			break
+		}
+
+		return e.complexity.Transantiago.Servicios(childComplexity), true
 
 	}
 	return 0, false
@@ -450,6 +656,345 @@ func (ec *executionContext) _Currently_precipProbability(ctx context.Context, fi
 	return graphql.MarshalFloat(res)
 }
 
+var earthquakeImplementors = []string{"Earthquake"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Earthquake(ctx context.Context, sel ast.SelectionSet, obj *Earthquake) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, earthquakeImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Earthquake")
+		case "enlace":
+			out.Values[i] = ec._Earthquake_enlace(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "latitud":
+			out.Values[i] = ec._Earthquake_latitud(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "longitude":
+			out.Values[i] = ec._Earthquake_longitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "profundidad":
+			out.Values[i] = ec._Earthquake_profundidad(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "magnitude":
+			out.Values[i] = ec._Earthquake_magnitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "imagen":
+			out.Values[i] = ec._Earthquake_imagen(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_enlace(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Enlace, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_latitud(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Latitud, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_longitude(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Longitude, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_profundidad(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Profundidad, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_magnitude(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Magnitude, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(EarthquakeMagnitude)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	return ec._EarthquakeMagnitude(ctx, field.Selections, &res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Earthquake_imagen(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Earthquake",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Imagen, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+var earthquakeMagnitudeImplementors = []string{"EarthquakeMagnitude"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _EarthquakeMagnitude(ctx context.Context, sel ast.SelectionSet, obj *EarthquakeMagnitude) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, earthquakeMagnitudeImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EarthquakeMagnitude")
+		case "magnitude":
+			out.Values[i] = ec._EarthquakeMagnitude_magnitude(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "medida":
+			out.Values[i] = ec._EarthquakeMagnitude_medida(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "fuente":
+			out.Values[i] = ec._EarthquakeMagnitude_fuente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _EarthquakeMagnitude_magnitude(ctx context.Context, field graphql.CollectedField, obj *EarthquakeMagnitude) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "EarthquakeMagnitude",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Magnitude, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalFloat(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _EarthquakeMagnitude_medida(ctx context.Context, field graphql.CollectedField, obj *EarthquakeMagnitude) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "EarthquakeMagnitude",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Medida, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _EarthquakeMagnitude_fuente(ctx context.Context, field graphql.CollectedField, obj *EarthquakeMagnitude) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "EarthquakeMagnitude",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Fuente, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
 var forecastImplementors = []string{"Forecast"}
 
 // nolint: gocyclo, errcheck, gas, goconst
@@ -636,6 +1181,191 @@ func (ec *executionContext) _Forecast_currently(ctx context.Context, field graph
 	return ec._Currently(ctx, field.Selections, &res)
 }
 
+var microbusImplementors = []string{"Microbus"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Microbus(ctx context.Context, sel ast.SelectionSet, obj *Microbus) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, microbusImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Microbus")
+		case "valido":
+			out.Values[i] = ec._Microbus_valido(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "servicio":
+			out.Values[i] = ec._Microbus_servicio(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "patente":
+			out.Values[i] = ec._Microbus_patente(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "tiempo":
+			out.Values[i] = ec._Microbus_tiempo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "distancia":
+			out.Values[i] = ec._Microbus_distancia(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Microbus_valido(ctx context.Context, field graphql.CollectedField, obj *Microbus) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Microbus",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Valido, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalInt(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Microbus_servicio(ctx context.Context, field graphql.CollectedField, obj *Microbus) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Microbus",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Servicio, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Microbus_patente(ctx context.Context, field graphql.CollectedField, obj *Microbus) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Microbus",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Patente, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Microbus_tiempo(ctx context.Context, field graphql.CollectedField, obj *Microbus) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Microbus",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tiempo, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Microbus_distancia(ctx context.Context, field graphql.CollectedField, obj *Microbus) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Microbus",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Distancia, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
 var queryImplementors = []string{"Query"}
 
 // nolint: gocyclo, errcheck, gas, goconst
@@ -668,6 +1398,24 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			wg.Add(1)
 			go func(i int, field graphql.CollectedField) {
 				out.Values[i] = ec._Query_forecast(ctx, field)
+				wg.Done()
+			}(i, field)
+		case "hearthquake":
+			wg.Add(1)
+			go func(i int, field graphql.CollectedField) {
+				out.Values[i] = ec._Query_hearthquake(ctx, field)
+				if out.Values[i] == graphql.Null {
+					invalid = true
+				}
+				wg.Done()
+			}(i, field)
+		case "transantiago":
+			wg.Add(1)
+			go func(i int, field graphql.CollectedField) {
+				out.Values[i] = ec._Query_transantiago(ctx, field)
+				if out.Values[i] == graphql.Null {
+					invalid = true
+				}
 				wg.Done()
 			}(i, field)
 		case "__type":
@@ -748,6 +1496,74 @@ func (ec *executionContext) _Query_forecast(ctx context.Context, field graphql.C
 }
 
 // nolint: vetshadow
+func (ec *executionContext) _Query_hearthquake(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := field_Query_hearthquake_args(rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx := &graphql.ResolverContext{
+		Object: "Query",
+		Args:   args,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Hearthquake(rctx, args["data"].(string))
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(Earthquake)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	return ec._Earthquake(ctx, field.Selections, &res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Query_transantiago(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := field_Query_transantiago_args(rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx := &graphql.ResolverContext{
+		Object: "Query",
+		Args:   args,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Transantiago(rctx, args["data"].(string))
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(Transantiago)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	return ec._Transantiago(ctx, field.Selections, &res)
+}
+
+// nolint: vetshadow
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
@@ -809,6 +1625,160 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	}
 
 	return ec.___Schema(ctx, field.Selections, res)
+}
+
+var transantiagoImplementors = []string{"Transantiago"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Transantiago(ctx context.Context, sel ast.SelectionSet, obj *Transantiago) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, transantiagoImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Transantiago")
+		case "horaConsulta":
+			out.Values[i] = ec._Transantiago_horaConsulta(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "descripcion":
+			out.Values[i] = ec._Transantiago_descripcion(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "Servicios":
+			out.Values[i] = ec._Transantiago_Servicios(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Transantiago_horaConsulta(ctx context.Context, field graphql.CollectedField, obj *Transantiago) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Transantiago",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HoraConsulta, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Transantiago_descripcion(ctx context.Context, field graphql.CollectedField, obj *Transantiago) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Transantiago",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Descripcion, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Transantiago_Servicios(ctx context.Context, field graphql.CollectedField, obj *Transantiago) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Transantiago",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Servicios, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]Microbus)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	arr1 := make(graphql.Array, len(res))
+	var wg sync.WaitGroup
+
+	isLen1 := len(res) == 1
+	if !isLen1 {
+		wg.Add(len(res))
+	}
+
+	for idx1 := range res {
+		idx1 := idx1
+		rctx := &graphql.ResolverContext{
+			Index:  &idx1,
+			Result: &res[idx1],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(idx1 int) {
+			if !isLen1 {
+				defer wg.Done()
+			}
+			arr1[idx1] = func() graphql.Marshaler {
+
+				return ec._Microbus(ctx, field.Selections, &res[idx1])
+			}()
+		}
+		if isLen1 {
+			f(idx1)
+		} else {
+			go f(idx1)
+		}
+
+	}
+	wg.Wait()
+	return arr1
 }
 
 var __DirectiveImplementors = []string{"__Directive"}
@@ -2338,9 +3308,40 @@ type Forecast {
   currently: Currently!
 }
 
+type EarthquakeMagnitude {
+  magnitude: Float!
+  medida: String!
+  fuente: String!
+}
+
+type Earthquake {
+  enlace: String!
+  latitud: Float!
+  longitude: Float!
+  profundidad: Float!
+  magnitude: EarthquakeMagnitude!
+  imagen: String!
+}
+
+type Microbus {
+  valido: Int!
+  servicio: String!
+  patente: String!
+  tiempo: String!
+  distancia: String!
+}
+
+type Transantiago {
+  horaConsulta: String!
+  descripcion: String!
+  Servicios: [Microbus!]!
+}
+
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
+  hearthquake(data: String!): Earthquake!
+  transantiago(data: String!): Transantiago!
 }
 
 scalar Hello

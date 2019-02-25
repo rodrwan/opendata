@@ -20,9 +20,40 @@ type Forecast {
   currently: Currently!
 }
 
+type EarthquakeMagnitude {
+  magnitude: Float!
+  medida: String!
+  fuente: String!
+}
+
+type Earthquake {
+  enlace: String!
+  latitud: Float!
+  longitude: Float!
+  profundidad: Float!
+  magnitude: EarthquakeMagnitude!
+  imagen: String!
+}
+
+type Microbus {
+  valido: Int!
+  servicio: String!
+  patente: String!
+  tiempo: String!
+  distancia: String!
+}
+
+type Transantiago {
+  horaConsulta: String!
+  descripcion: String!
+  Servicios: [Microbus!]!
+}
+
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
+  hearthquake(data: String!): Earthquake!
+  transantiago(data: String!): Transantiago!
 }
 
 scalar Hello

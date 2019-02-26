@@ -49,11 +49,29 @@ type Transantiago {
   servicios: [Microbus!]!
 }
 
+type Horoscope {
+  titulo: String!
+  horoscopo: ZodiacSign!
+}
+
+
+type ZodiacSignData  {
+	nombre: String!
+	fechaSigno: String!
+	amor: String!
+	salud: String!
+	dinero: String!
+	color: String!
+	numero: String!
+}
+
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
   hearthquake(data: String!): [Earthquake!]!
   transantiago(data: String!): Transantiago!
+  horoscope: Horoscope
 }
 
 scalar Hello
+scalar ZodiacSign

@@ -2,6 +2,10 @@
 
 package v2
 
+import (
+	"github.com/rodrwan/opendata/graphql/tyaas"
+)
+
 type Currently struct {
 	Summary           string  `json:"summary"`
 	Temperature       float64 `json:"temperature"`
@@ -39,6 +43,11 @@ type ForecastInput struct {
 	Lang      string  `json:"lang"`
 }
 
+type Horoscope struct {
+	Titulo    string           `json:"titulo"`
+	Horoscopo tyaas.ZodiacSign `json:"horoscopo"`
+}
+
 type Microbus struct {
 	Valido    int    `json:"valido"`
 	Servicio  string `json:"servicio"`
@@ -51,4 +60,14 @@ type Transantiago struct {
 	HoraConsulta string     `json:"horaConsulta"`
 	Descripcion  string     `json:"descripcion"`
 	Servicios    []Microbus `json:"servicios"`
+}
+
+type ZodiacSignData struct {
+	Nombre     string `json:"nombre"`
+	FechaSigno string `json:"fechaSigno"`
+	Amor       string `json:"amor"`
+	Salud      string `json:"salud"`
+	Dinero     string `json:"dinero"`
+	Color      string `json:"color"`
+	Numero     string `json:"numero"`
 }

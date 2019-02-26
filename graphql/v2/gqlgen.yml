@@ -12,3 +12,6 @@ model:
 resolver:
   filename: resolver.go
   type: Resolver
+models:
+  ZodiacSign:
+    model: github.com/rodrwan/opendata/graphql/tyaas.ZodiacSign

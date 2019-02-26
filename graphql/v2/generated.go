@@ -11,6 +11,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/rodrwan/opendata/graphql/tyaas"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -69,6 +70,11 @@ type ComplexityRoot struct {
 		Currently func(childComplexity int) int
 	}
 
+	Horoscope struct {
+		Titulo    func(childComplexity int) int
+		Horoscopo func(childComplexity int) int
+	}
+
 	Microbus struct {
 		Valido    func(childComplexity int) int
 		Servicio  func(childComplexity int) int
@@ -82,12 +88,23 @@ type ComplexityRoot struct {
 		Forecast     func(childComplexity int, data *ForecastInput) int
 		Hearthquake  func(childComplexity int, data string) int
 		Transantiago func(childComplexity int, data string) int
+		Horoscope    func(childComplexity int) int
 	}
 
 	Transantiago struct {
 		HoraConsulta func(childComplexity int) int
 		Descripcion  func(childComplexity int) int
 		Servicios    func(childComplexity int) int
+	}
+
+	ZodiacSignData struct {
+		Nombre     func(childComplexity int) int
+		FechaSigno func(childComplexity int) int
+		Amor       func(childComplexity int) int
+		Salud      func(childComplexity int) int
+		Dinero     func(childComplexity int) int
+		Color      func(childComplexity int) int
+		Numero     func(childComplexity int) int
 	}
 }
 
@@ -96,6 +113,7 @@ type QueryResolver interface {
 	Forecast(ctx context.Context, data *ForecastInput) (*Forecast, error)
 	Hearthquake(ctx context.Context, data string) ([]Earthquake, error)
 	Transantiago(ctx context.Context, data string) (Transantiago, error)
+	Horoscope(ctx context.Context) (*Horoscope, error)
 }
 
 func field_Query_forecast_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
@@ -339,6 +357,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Forecast.Currently(childComplexity), true
 
+	case "Horoscope.titulo":
+		if e.complexity.Horoscope.Titulo == nil {
+			break
+		}
+
+		return e.complexity.Horoscope.Titulo(childComplexity), true
+
+	case "Horoscope.horoscopo":
+		if e.complexity.Horoscope.Horoscopo == nil {
+			break
+		}
+
+		return e.complexity.Horoscope.Horoscopo(childComplexity), true
+
 	case "Microbus.valido":
 		if e.complexity.Microbus.Valido == nil {
 			break
@@ -417,6 +449,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Transantiago(childComplexity, args["data"].(string)), true
 
+	case "Query.horoscope":
+		if e.complexity.Query.Horoscope == nil {
+			break
+		}
+
+		return e.complexity.Query.Horoscope(childComplexity), true
+
 	case "Transantiago.horaConsulta":
 		if e.complexity.Transantiago.HoraConsulta == nil {
 			break
@@ -437,6 +476,55 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Transantiago.Servicios(childComplexity), true
+
+	case "ZodiacSignData.nombre":
+		if e.complexity.ZodiacSignData.Nombre == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Nombre(childComplexity), true
+
+	case "ZodiacSignData.fechaSigno":
+		if e.complexity.ZodiacSignData.FechaSigno == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.FechaSigno(childComplexity), true
+
+	case "ZodiacSignData.amor":
+		if e.complexity.ZodiacSignData.Amor == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Amor(childComplexity), true
+
+	case "ZodiacSignData.salud":
+		if e.complexity.ZodiacSignData.Salud == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Salud(childComplexity), true
+
+	case "ZodiacSignData.dinero":
+		if e.complexity.ZodiacSignData.Dinero == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Dinero(childComplexity), true
+
+	case "ZodiacSignData.color":
+		if e.complexity.ZodiacSignData.Color == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Color(childComplexity), true
+
+	case "ZodiacSignData.numero":
+		if e.complexity.ZodiacSignData.Numero == nil {
+			break
+		}
+
+		return e.complexity.ZodiacSignData.Numero(childComplexity), true
 
 	}
 	return 0, false
@@ -1217,6 +1305,95 @@ func (ec *executionContext) _Forecast_currently(ctx context.Context, field graph
 	return ec._Currently(ctx, field.Selections, &res)
 }
 
+var horoscopeImplementors = []string{"Horoscope"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _Horoscope(ctx context.Context, sel ast.SelectionSet, obj *Horoscope) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, horoscopeImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Horoscope")
+		case "titulo":
+			out.Values[i] = ec._Horoscope_titulo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "horoscopo":
+			out.Values[i] = ec._Horoscope_horoscopo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Horoscope_titulo(ctx context.Context, field graphql.CollectedField, obj *Horoscope) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Horoscope",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Titulo, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Horoscope_horoscopo(ctx context.Context, field graphql.CollectedField, obj *Horoscope) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Horoscope",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Horoscopo, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(tyaas.ZodiacSign)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return res
+}
+
 var microbusImplementors = []string{"Microbus"}
 
 // nolint: gocyclo, errcheck, gas, goconst
@@ -1454,6 +1631,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				wg.Done()
 			}(i, field)
+		case "horoscope":
+			wg.Add(1)
+			go func(i int, field graphql.CollectedField) {
+				out.Values[i] = ec._Query_horoscope(ctx, field)
+				wg.Done()
+			}(i, field)
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -1629,6 +1812,35 @@ func (ec *executionContext) _Query_transantiago(ctx context.Context, field graph
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
 	return ec._Transantiago(ctx, field.Selections, &res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _Query_horoscope(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "Query",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Horoscope(rctx)
+	})
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*Horoscope)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+
+	if res == nil {
+		return graphql.Null
+	}
+
+	return ec._Horoscope(ctx, field.Selections, res)
 }
 
 // nolint: vetshadow
@@ -1847,6 +2059,255 @@ func (ec *executionContext) _Transantiago_servicios(ctx context.Context, field g
 	}
 	wg.Wait()
 	return arr1
+}
+
+var zodiacSignDataImplementors = []string{"ZodiacSignData"}
+
+// nolint: gocyclo, errcheck, gas, goconst
+func (ec *executionContext) _ZodiacSignData(ctx context.Context, sel ast.SelectionSet, obj *ZodiacSignData) graphql.Marshaler {
+	fields := graphql.CollectFields(ctx, sel, zodiacSignDataImplementors)
+
+	out := graphql.NewOrderedMap(len(fields))
+	invalid := false
+	for i, field := range fields {
+		out.Keys[i] = field.Alias
+
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ZodiacSignData")
+		case "nombre":
+			out.Values[i] = ec._ZodiacSignData_nombre(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "fechaSigno":
+			out.Values[i] = ec._ZodiacSignData_fechaSigno(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "amor":
+			out.Values[i] = ec._ZodiacSignData_amor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "salud":
+			out.Values[i] = ec._ZodiacSignData_salud(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "dinero":
+			out.Values[i] = ec._ZodiacSignData_dinero(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "color":
+			out.Values[i] = ec._ZodiacSignData_color(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		case "numero":
+			out.Values[i] = ec._ZodiacSignData_numero(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalid = true
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+
+	if invalid {
+		return graphql.Null
+	}
+	return out
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_nombre(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Nombre, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_fechaSigno(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FechaSigno, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_amor(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Amor, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_salud(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Salud, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_dinero(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Dinero, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_color(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Color, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
+}
+
+// nolint: vetshadow
+func (ec *executionContext) _ZodiacSignData_numero(ctx context.Context, field graphql.CollectedField, obj *ZodiacSignData) graphql.Marshaler {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
+	rctx := &graphql.ResolverContext{
+		Object: "ZodiacSignData",
+		Args:   nil,
+		Field:  field,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Numero, nil
+	})
+	if resTmp == nil {
+		if !ec.HasError(rctx) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return graphql.MarshalString(res)
 }
 
 var __DirectiveImplementors = []string{"__Directive"}
@@ -3405,13 +3866,31 @@ type Transantiago {
   servicios: [Microbus!]!
 }
 
+type Horoscope {
+  titulo: String!
+  horoscopo: ZodiacSign!
+}
+
+
+type ZodiacSignData  {
+	nombre: String!
+	fechaSigno: String!
+	amor: String!
+	salud: String!
+	dinero: String!
+	color: String!
+	numero: String!
+}
+
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
   hearthquake(data: String!): [Earthquake!]!
   transantiago(data: String!): Transantiago!
+  horoscope: Horoscope
 }
 
 scalar Hello
+scalar ZodiacSign
 `},
 )

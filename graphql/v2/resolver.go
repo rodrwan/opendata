@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/rodrwan/opendata/graphql/tyaas"
+
 	"github.com/rodrwan/opendata/graphql/earthquake"
 	"github.com/rodrwan/opendata/graphql/gmarcone"
 	"github.com/rodrwan/opendata/graphql/transapi"
@@ -14,6 +16,7 @@ type Resolver struct {
 	GMarconeClient *gmarcone.Client
 	Transapi       *transapi.Client
 	Earthquake     *earthquake.Client
+	Tyaas          *tyaas.Client
 }
 
 func (r *Resolver) Query() QueryResolver {
@@ -97,5 +100,17 @@ func (r *queryResolver) Transantiago(ctx context.Context, data string) (Transant
 		HoraConsulta: resp.Time,
 		Descripcion:  resp.Message,
 		Servicios:    servicios,
+	}, nil
+}
+
+func (r *queryResolver) Horoscope(ctx context.Context) (*Horoscope, error) {
+	resp, err := r.Resolver.Tyaas.Get()
+	if err != nil {
+		return nil, err
+	}
+
+	return &Horoscope{
+		Titulo:    resp.Date,
+		Horoscopo: resp.ZodiacSigns,
 	}, nil
 }

@@ -431,7 +431,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Transantiago.Descripcion(childComplexity), true
 
-	case "Transantiago.Servicios":
+	case "Transantiago.servicios":
 		if e.complexity.Transantiago.Servicios == nil {
 			break
 		}
@@ -1651,8 +1651,8 @@ func (ec *executionContext) _Transantiago(ctx context.Context, sel ast.Selection
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
-		case "Servicios":
-			out.Values[i] = ec._Transantiago_Servicios(ctx, field, obj)
+		case "servicios":
+			out.Values[i] = ec._Transantiago_servicios(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
@@ -1722,7 +1722,7 @@ func (ec *executionContext) _Transantiago_descripcion(ctx context.Context, field
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Transantiago_Servicios(ctx context.Context, field graphql.CollectedField, obj *Transantiago) graphql.Marshaler {
+func (ec *executionContext) _Transantiago_servicios(ctx context.Context, field graphql.CollectedField, obj *Transantiago) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -3334,7 +3334,7 @@ type Microbus {
 type Transantiago {
   horaConsulta: String!
   descripcion: String!
-  Servicios: [Microbus!]!
+  servicios: [Microbus!]!
 }
 
 type Query {

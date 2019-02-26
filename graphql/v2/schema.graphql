@@ -46,7 +46,7 @@ type Microbus {
 type Transantiago {
   horaConsulta: String!
   descripcion: String!
-  Servicios: [Microbus!]!
+  servicios: [Microbus!]!
 }
 
 type Query {

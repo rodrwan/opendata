@@ -6,10 +6,12 @@ import (
 	"fmt"
 
 	"github.com/rodrwan/opendata/graphql/gmarcone"
+	"github.com/rodrwan/opendata/graphql/transapi"
 )
 
 type Resolver struct {
 	GMarconeClient *gmarcone.Client
+	Transapi       *transapi.Client
 }
 
 func (r *Resolver) Query() QueryResolver {
@@ -42,5 +44,28 @@ func (r *queryResolver) Hearthquake(ctx context.Context, data string) (Earthquak
 }
 
 func (r *queryResolver) Transantiago(ctx context.Context, data string) (Transantiago, error) {
-	panic("not implemented")
+	resp, err := r.Resolver.Transapi.Get(data)
+	if err != nil {
+		return Transantiago{}, err
+	}
+
+	servicios := make([]Microbus, 0)
+
+	for _, svc := range resp.Services {
+		if svc.Valid == 1 {
+			servicios = append(servicios, Microbus{
+				Valido:    int(svc.Valid),
+				Servicio:  svc.Service,
+				Patente:   svc.BusPatent,
+				Tiempo:    svc.Time,
+				Distancia: svc.Distance,
+			})
+		}
+	}
+
+	return Transantiago{
+		HoraConsulta: resp.Time,
+		Descripcion:  resp.Message,
+		Servicios:    servicios,
+	}, nil
 }

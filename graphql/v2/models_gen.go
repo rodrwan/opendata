@@ -50,5 +50,5 @@ type Microbus struct {
 type Transantiago struct {
 	HoraConsulta string     `json:"horaConsulta"`
 	Descripcion  string     `json:"descripcion"`
-	Servicios    []Microbus `json:"Servicios"`
+	Servicios    []Microbus `json:"servicios"`
 }

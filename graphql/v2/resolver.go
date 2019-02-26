@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/rodrwan/opendata/graphql/earthquake"
 	"github.com/rodrwan/opendata/graphql/gmarcone"
 	"github.com/rodrwan/opendata/graphql/transapi"
 )
@@ -12,6 +13,7 @@ import (
 type Resolver struct {
 	GMarconeClient *gmarcone.Client
 	Transapi       *transapi.Client
+	Earthquake     *earthquake.Client
 }
 
 func (r *Resolver) Query() QueryResolver {
@@ -39,8 +41,36 @@ func (r *queryResolver) Forecast(ctx context.Context, data *ForecastInput) (*For
 	return &forecast, err
 }
 
-func (r *queryResolver) Hearthquake(ctx context.Context, data string) (Earthquake, error) {
-	panic("not implemented")
+func (r *queryResolver) Hearthquake(ctx context.Context, data string) ([]Earthquake, error) {
+	resp, err := r.Resolver.Earthquake.Get(data)
+	if err != nil {
+		return []Earthquake{}, err
+	}
+
+	earthquakes := make([]Earthquake, 0)
+
+	for _, earthquake := range resp {
+		magnitudes := make([]*EarthquakeMagnitude, 0)
+		for _, magnitude := range earthquake.Magnitudes {
+			magnitudes = append(magnitudes, &EarthquakeMagnitude{
+				Magnitud: magnitude.Magnitud,
+				Medida:   magnitude.Medida,
+				Fuente:   magnitude.Fuente,
+			})
+		}
+
+		e := Earthquake{
+			Enlace:      earthquake.Enlace,
+			Latitud:     earthquake.Latitud,
+			Longitud:    earthquake.Longitud,
+			Magnitudes:  magnitudes,
+			Profundidad: earthquake.Profundidad,
+			Imagen:      earthquake.Imagen,
+		}
+		earthquakes = append(earthquakes, e)
+	}
+
+	return earthquakes, nil
 }
 
 func (r *queryResolver) Transantiago(ctx context.Context, data string) (Transantiago, error) {

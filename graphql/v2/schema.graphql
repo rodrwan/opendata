@@ -21,7 +21,7 @@ type Forecast {
 }
 
 type EarthquakeMagnitude {
-  magnitude: Float!
+  magnitud: Float!
   medida: String!
   fuente: String!
 }
@@ -29,9 +29,9 @@ type EarthquakeMagnitude {
 type Earthquake {
   enlace: String!
   latitud: Float!
-  longitude: Float!
+  longitud: Float!
   profundidad: Float!
-  magnitude: EarthquakeMagnitude!
+  magnitudes: [EarthquakeMagnitude]!
   imagen: String!
 }
 
@@ -52,7 +52,7 @@ type Transantiago {
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
-  hearthquake(data: String!): Earthquake!
+  hearthquake(data: String!): [Earthquake!]!
   transantiago(data: String!): Transantiago!
 }
 

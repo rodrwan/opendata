@@ -49,16 +49,16 @@ type ComplexityRoot struct {
 	Earthquake struct {
 		Enlace      func(childComplexity int) int
 		Latitud     func(childComplexity int) int
-		Longitude   func(childComplexity int) int
+		Longitud    func(childComplexity int) int
 		Profundidad func(childComplexity int) int
-		Magnitude   func(childComplexity int) int
+		Magnitudes  func(childComplexity int) int
 		Imagen      func(childComplexity int) int
 	}
 
 	EarthquakeMagnitude struct {
-		Magnitude func(childComplexity int) int
-		Medida    func(childComplexity int) int
-		Fuente    func(childComplexity int) int
+		Magnitud func(childComplexity int) int
+		Medida   func(childComplexity int) int
+		Fuente   func(childComplexity int) int
 	}
 
 	Forecast struct {
@@ -94,7 +94,7 @@ type ComplexityRoot struct {
 type QueryResolver interface {
 	Hello(ctx context.Context) (string, error)
 	Forecast(ctx context.Context, data *ForecastInput) (*Forecast, error)
-	Hearthquake(ctx context.Context, data string) (Earthquake, error)
+	Hearthquake(ctx context.Context, data string) ([]Earthquake, error)
 	Transantiago(ctx context.Context, data string) (Transantiago, error)
 }
 
@@ -255,12 +255,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Earthquake.Latitud(childComplexity), true
 
-	case "Earthquake.longitude":
-		if e.complexity.Earthquake.Longitude == nil {
+	case "Earthquake.longitud":
+		if e.complexity.Earthquake.Longitud == nil {
 			break
 		}
 
-		return e.complexity.Earthquake.Longitude(childComplexity), true
+		return e.complexity.Earthquake.Longitud(childComplexity), true
 
 	case "Earthquake.profundidad":
 		if e.complexity.Earthquake.Profundidad == nil {
@@ -269,12 +269,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Earthquake.Profundidad(childComplexity), true
 
-	case "Earthquake.magnitude":
-		if e.complexity.Earthquake.Magnitude == nil {
+	case "Earthquake.magnitudes":
+		if e.complexity.Earthquake.Magnitudes == nil {
 			break
 		}
 
-		return e.complexity.Earthquake.Magnitude(childComplexity), true
+		return e.complexity.Earthquake.Magnitudes(childComplexity), true
 
 	case "Earthquake.imagen":
 		if e.complexity.Earthquake.Imagen == nil {
@@ -283,12 +283,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Earthquake.Imagen(childComplexity), true
 
-	case "EarthquakeMagnitude.magnitude":
-		if e.complexity.EarthquakeMagnitude.Magnitude == nil {
+	case "EarthquakeMagnitude.magnitud":
+		if e.complexity.EarthquakeMagnitude.Magnitud == nil {
 			break
 		}
 
-		return e.complexity.EarthquakeMagnitude.Magnitude(childComplexity), true
+		return e.complexity.EarthquakeMagnitude.Magnitud(childComplexity), true
 
 	case "EarthquakeMagnitude.medida":
 		if e.complexity.EarthquakeMagnitude.Medida == nil {
@@ -680,8 +680,8 @@ func (ec *executionContext) _Earthquake(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
-		case "longitude":
-			out.Values[i] = ec._Earthquake_longitude(ctx, field, obj)
+		case "longitud":
+			out.Values[i] = ec._Earthquake_longitud(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
@@ -690,8 +690,8 @@ func (ec *executionContext) _Earthquake(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
-		case "magnitude":
-			out.Values[i] = ec._Earthquake_magnitude(ctx, field, obj)
+		case "magnitudes":
+			out.Values[i] = ec._Earthquake_magnitudes(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
@@ -766,7 +766,7 @@ func (ec *executionContext) _Earthquake_latitud(ctx context.Context, field graph
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Earthquake_longitude(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+func (ec *executionContext) _Earthquake_longitud(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -778,7 +778,7 @@ func (ec *executionContext) _Earthquake_longitude(ctx context.Context, field gra
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Longitude, nil
+		return obj.Longitud, nil
 	})
 	if resTmp == nil {
 		if !ec.HasError(rctx) {
@@ -820,7 +820,7 @@ func (ec *executionContext) _Earthquake_profundidad(ctx context.Context, field g
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Earthquake_magnitude(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
+func (ec *executionContext) _Earthquake_magnitudes(ctx context.Context, field graphql.CollectedField, obj *Earthquake) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -832,7 +832,7 @@ func (ec *executionContext) _Earthquake_magnitude(ctx context.Context, field gra
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Magnitude, nil
+		return obj.Magnitudes, nil
 	})
 	if resTmp == nil {
 		if !ec.HasError(rctx) {
@@ -840,11 +840,47 @@ func (ec *executionContext) _Earthquake_magnitude(ctx context.Context, field gra
 		}
 		return graphql.Null
 	}
-	res := resTmp.(EarthquakeMagnitude)
+	res := resTmp.([]*EarthquakeMagnitude)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
-	return ec._EarthquakeMagnitude(ctx, field.Selections, &res)
+	arr1 := make(graphql.Array, len(res))
+	var wg sync.WaitGroup
+
+	isLen1 := len(res) == 1
+	if !isLen1 {
+		wg.Add(len(res))
+	}
+
+	for idx1 := range res {
+		idx1 := idx1
+		rctx := &graphql.ResolverContext{
+			Index:  &idx1,
+			Result: res[idx1],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(idx1 int) {
+			if !isLen1 {
+				defer wg.Done()
+			}
+			arr1[idx1] = func() graphql.Marshaler {
+
+				if res[idx1] == nil {
+					return graphql.Null
+				}
+
+				return ec._EarthquakeMagnitude(ctx, field.Selections, res[idx1])
+			}()
+		}
+		if isLen1 {
+			f(idx1)
+		} else {
+			go f(idx1)
+		}
+
+	}
+	wg.Wait()
+	return arr1
 }
 
 // nolint: vetshadow
@@ -888,8 +924,8 @@ func (ec *executionContext) _EarthquakeMagnitude(ctx context.Context, sel ast.Se
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("EarthquakeMagnitude")
-		case "magnitude":
-			out.Values[i] = ec._EarthquakeMagnitude_magnitude(ctx, field, obj)
+		case "magnitud":
+			out.Values[i] = ec._EarthquakeMagnitude_magnitud(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
@@ -915,7 +951,7 @@ func (ec *executionContext) _EarthquakeMagnitude(ctx context.Context, sel ast.Se
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _EarthquakeMagnitude_magnitude(ctx context.Context, field graphql.CollectedField, obj *EarthquakeMagnitude) graphql.Marshaler {
+func (ec *executionContext) _EarthquakeMagnitude_magnitud(ctx context.Context, field graphql.CollectedField, obj *EarthquakeMagnitude) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -927,7 +963,7 @@ func (ec *executionContext) _EarthquakeMagnitude_magnitude(ctx context.Context, 
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Magnitude, nil
+		return obj.Magnitud, nil
 	})
 	if resTmp == nil {
 		if !ec.HasError(rctx) {
@@ -1522,11 +1558,43 @@ func (ec *executionContext) _Query_hearthquake(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(Earthquake)
+	res := resTmp.([]Earthquake)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
-	return ec._Earthquake(ctx, field.Selections, &res)
+	arr1 := make(graphql.Array, len(res))
+	var wg sync.WaitGroup
+
+	isLen1 := len(res) == 1
+	if !isLen1 {
+		wg.Add(len(res))
+	}
+
+	for idx1 := range res {
+		idx1 := idx1
+		rctx := &graphql.ResolverContext{
+			Index:  &idx1,
+			Result: &res[idx1],
+		}
+		ctx := graphql.WithResolverContext(ctx, rctx)
+		f := func(idx1 int) {
+			if !isLen1 {
+				defer wg.Done()
+			}
+			arr1[idx1] = func() graphql.Marshaler {
+
+				return ec._Earthquake(ctx, field.Selections, &res[idx1])
+			}()
+		}
+		if isLen1 {
+			f(idx1)
+		} else {
+			go f(idx1)
+		}
+
+	}
+	wg.Wait()
+	return arr1
 }
 
 // nolint: vetshadow
@@ -3309,7 +3377,7 @@ type Forecast {
 }
 
 type EarthquakeMagnitude {
-  magnitude: Float!
+  magnitud: Float!
   medida: String!
   fuente: String!
 }
@@ -3317,9 +3385,9 @@ type EarthquakeMagnitude {
 type Earthquake {
   enlace: String!
   latitud: Float!
-  longitude: Float!
+  longitud: Float!
   profundidad: Float!
-  magnitude: EarthquakeMagnitude!
+  magnitudes: [EarthquakeMagnitude]!
   imagen: String!
 }
 
@@ -3340,7 +3408,7 @@ type Transantiago {
 type Query {
   hello: Hello!
   forecast(data: ForecastInput): Forecast
-  hearthquake(data: String!): Earthquake!
+  hearthquake(data: String!): [Earthquake!]!
   transantiago(data: String!): Transantiago!
 }
 

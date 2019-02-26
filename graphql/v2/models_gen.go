@@ -11,18 +11,18 @@ type Currently struct {
 }
 
 type Earthquake struct {
-	Enlace      string              `json:"enlace"`
-	Latitud     float64             `json:"latitud"`
-	Longitude   float64             `json:"longitude"`
-	Profundidad float64             `json:"profundidad"`
-	Magnitude   EarthquakeMagnitude `json:"magnitude"`
-	Imagen      string              `json:"imagen"`
+	Enlace      string                 `json:"enlace"`
+	Latitud     float64                `json:"latitud"`
+	Longitud    float64                `json:"longitud"`
+	Profundidad float64                `json:"profundidad"`
+	Magnitudes  []*EarthquakeMagnitude `json:"magnitudes"`
+	Imagen      string                 `json:"imagen"`
 }
 
 type EarthquakeMagnitude struct {
-	Magnitude float64 `json:"magnitude"`
-	Medida    string  `json:"medida"`
-	Fuente    string  `json:"fuente"`
+	Magnitud float64 `json:"magnitud"`
+	Medida   string  `json:"medida"`
+	Fuente   string  `json:"fuente"`
 }
 
 type Forecast struct {

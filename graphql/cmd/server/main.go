@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rodrwan/opendata/graphql/tyaas"
+
 	"github.com/rodrwan/opendata/graphql/earthquake"
 	"github.com/rodrwan/opendata/graphql/gmarcone"
 	"github.com/rodrwan/opendata/graphql/transapi"
@@ -39,6 +41,7 @@ func HandlerV2(URL string) gin.HandlerFunc {
 				GMarconeClient: gmarcone.NewClient(URL),
 				Transapi:       transapi.NewClient(),
 				Earthquake:     earthquake.NewClient(),
+				Tyaas:          tyaas.NewClient(),
 			}},
 		),
 	)

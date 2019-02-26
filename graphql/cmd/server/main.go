@@ -5,7 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rodrwan/opendata/graphql/v2/gmarcone"
+	"github.com/rodrwan/opendata/graphql/gmarcone"
+	"github.com/rodrwan/opendata/graphql/transapi"
 
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
@@ -35,6 +36,7 @@ func HandlerV2(URL string) gin.HandlerFunc {
 		v2Graph.NewExecutableSchema(
 			v2Graph.Config{Resolvers: &v2Graph.Resolver{
 				GMarconeClient: gmarcone.NewClient(URL),
+				Transapi:       transapi.NewClient(),
 			}},
 		),
 	)
